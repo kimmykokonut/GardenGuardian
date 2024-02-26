@@ -6,8 +6,8 @@ namespace GardenApi.Models
   {
     public int GridId { get; set; }
     public string LocationCode { get; set; }
-    
-
-    public List<GridSeed> JoinEntities { get; }
+    public int GardenId { get; set; }
+    public Garden Garden { get; set; }
+    public List<GridSeed> GridSeeds { get; }
   }
 }

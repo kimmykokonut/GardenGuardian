@@ -2,8 +2,9 @@ using System.Collections.Generic;
 
 namespace GardenApi.Models
 {
-    public class seed
+    public class Seed
     {
+    public int SeedId {get; set;}
     public string Type {get; set;}
     public string Name {get; set;}
     public int Quantity {get; set;}
@@ -18,6 +19,7 @@ namespace GardenApi.Models
     public string Status {get; set;}
     public string Results {get; set;}
     public string Yield {get; set;}
-
+    public List<SeedTag> SeedTags { get; }
+    public List<GridSeed> GridSeeds { get; }
     }
 }
