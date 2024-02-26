@@ -33,7 +33,8 @@ namespace GardenApi.Models
                 PhotoUrl = "https://cdn.mos.cms.futurecdn.net/HMr9ceyW7Sc2kuz2S3dNF5.jpg",
                 Status = "planted",
                 Results = "n/a",
-                Yield = "n/a"
+                Yield = 5,
+                DatePlanted = "2-14-2024"
                 }
             );
         }

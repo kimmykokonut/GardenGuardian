@@ -17,8 +17,9 @@ namespace GardenApi.Models
     public int DaysToHarvest {get; set;}
     public string PhotoUrl {get; set;}
     public string Status {get; set;}
+    public string DatePlanted { get; set; }
     public string Results {get; set;}
-    public string Yield {get; set;}
+    public int Yield {get; set;}
     public List<SeedTag> SeedTags { get; }
     public List<GridSeed> GridSeeds { get; }
     }

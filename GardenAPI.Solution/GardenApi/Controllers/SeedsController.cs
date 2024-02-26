@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GardenApi.Models;
+using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
 
 namespace GardenApi.Controllers;
 
@@ -15,9 +16,35 @@ public class SeedsController : ControllerBase
     _db = db;
   }
   [HttpGet]
-  public async Task<ActionResult<IEnumerable<Seed>>> Get()
+  public async Task<ActionResult<IEnumerable<Seed>>> Get(string type, string name, string plantingDates, string status, string results, int yield)
   {
-    return await _db.Seeds.ToListAsync();
+    IQueryable<Seed> q = _db.Seeds.AsQueryable();
+    if ( type != null)
+    {
+      q = q.Where(e => e.Type == type);
+    }
+    if (name != null)
+    {
+      q = q.Where(e => e.Name.Contains(name));
+    }
+    if (plantingDates != null)
+    {
+      q = q.Where(e => e.PlantingDates == plantingDates);
+    }
+    if (status != null)
+    {
+      q = q.Where(e => e.Status == status);
+    }
+    if (results != null)
+    {
+      q = q.Where(e => e.Results == results);
+    }
+    if (yield > 0)
+    {
+      q = q.Where(e => e.Yield == yield);
+    }
+
+    return await q.ToListAsync();
   }
   [HttpGet("{id}")]
   public async Task<ActionResult<Seed>> GetSeed(int id)

@@ -84,6 +84,9 @@ namespace GardenApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("DatePlanted")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("DaysToGerminate")
                         .HasColumnType("longtext");
 
@@ -123,8 +126,8 @@ namespace GardenApi.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Yield")
-                        .HasColumnType("longtext");
+                    b.Property<int>("Yield")
+                        .HasColumnType("int");
 
                     b.HasKey("SeedId");
 
@@ -134,6 +137,7 @@ namespace GardenApi.Migrations
                         new
                         {
                             SeedId = 1,
+                            DatePlanted = "2-14-2024",
                             DaysToGerminate = "5-10",
                             DaysToHarvest = 45,
                             DepthToSow = "1/4-1/2 in",
@@ -147,7 +151,7 @@ namespace GardenApi.Migrations
                             SeedSpacing = "2 in",
                             Status = "planted",
                             Type = "vegetable",
-                            Yield = "n/a"
+                            Yield = 5
                         });
                 });
 
