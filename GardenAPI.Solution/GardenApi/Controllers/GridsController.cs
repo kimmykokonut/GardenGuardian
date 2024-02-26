@@ -21,5 +21,77 @@ namespace GardenApi.Controllers
     {
       return _db.Grids.ToList();
     }
+
+    [HttpGet("{id}")]
+    public ActionResult<Grid> GetGrid(int id)
+    {
+      var grid = _db.Grids
+          .Include(g => g.GridSeeds)
+          .ThenInclude(gs => gs.Seed)
+          .FirstOrDefault(g => g.GridId == id);
+
+      if (grid == null)
+      {
+        return NotFound();
+      }
+      return grid;
+    }
+    [HttpPost]
+    public ActionResult<Grid> PostGrid(Grid grid)
+    {
+      _db.Grids.Add(grid);
+      _db.SaveChanges();
+
+      return CreatedAtAction(nameof(GetGrid), new { id = grid.GridId }, grid);
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult PutGrid(int id, Grid grid)
+    {
+      if (id != grid.GridId)
+      {
+        return BadRequest();
+      }
+
+      _db.Entry(grid).State = EntityState.Modified;
+
+      try
+      {
+        _db.SaveChanges();
+      }
+      catch (DbUpdateConcurrencyException)
+      {
+        if (!GridExists(id))
+        {
+          return NotFound();
+        }
+        else
+        {
+          throw;
+        }
+      }
+
+      return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public ActionResult<Grid> DeleteGrid(int id)
+    {
+      var grid = _db.Grids.Find(id);
+      if(grid == null)
+      {
+        return NotFound();
+      }
+
+      _db.Grids.Remove(grid);
+      _db.SaveChanges();
+
+      return grid;
+    }
+
+    private bool GridExists(int id)
+    {
+      return _db.Grids.Any(e => e.GridId == id);
+    }
   }
 }
