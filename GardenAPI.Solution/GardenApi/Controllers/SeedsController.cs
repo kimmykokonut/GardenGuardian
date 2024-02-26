@@ -66,6 +66,18 @@ public class SeedsController : ControllerBase
   {
     return _db.Seeds.Any(e => e.SeedId == id);
   }
+  [HttpDelete("{id}")]
+  public async Task<IActionResult> DeleteSeed(int id)
+  {
+    Seed seedToDelete = await _db.Seeds.FindAsync(id);
+    if (seedToDelete == null)
+    {
+      return NotFound();
+    }
+    _db.Seeds.Remove(seedToDelete);
+    await _db.SaveChangesAsync();
 
+    return NoContent();
+  }
 
 }
