@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using GardenApi.Models;
+// using Microsoft.AspNetCore.Mvc;
+// using Microsoft.EntityFrameworkCore;
+// using GardenApi.Models;
 
-namespace GardenApi.Controllers
-{
-  [Route("api/")]
-}
+// namespace GardenApi.Controllers
+// {
+//   [Route("api/")]
+// }
