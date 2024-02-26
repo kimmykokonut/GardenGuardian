@@ -11,5 +11,5 @@ An application where a user can:
 - Data Visualization of planted garden grid
 - OpenWeatherApi to track weather at time of planting? User location?
 
-![]()
+![mysql relationship](./GardenAPI.Solution/GardenApi/wwwroot/img/models.png)
 
