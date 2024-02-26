@@ -17,7 +17,7 @@ namespace GardenApi.Controllers
       _db = db;
     }
     [HttpGet]
-    public ActionResult<IEnumerable<Grid>> GetGrids()
+    public ActionResult<IEnumerable<Grid>> GetGrids() //retrieves all grid objects;
     {
       return _db.Grids.ToList();
     }
@@ -45,8 +45,8 @@ namespace GardenApi.Controllers
       return CreatedAtAction(nameof(GetGrid), new { id = grid.GridId }, grid);
     }
 
-    [HttpPut("{id}")]
-    public IActionResult PutGrid(int id, Grid grid)
+    [HttpPut("{id}")] 
+    public IActionResult PutGrid(int id, Grid grid) // check id, determine result;
     {
       if (id != grid.GridId)
       {
