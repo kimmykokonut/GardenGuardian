@@ -1,97 +1,101 @@
 using System.Collections.Generic;
-using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using GardenApi.Models;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace GardenApi.Controllers
 {
-  [Route("api/[controller]")]
-  [ApiController]
-  public class GridsController : Controller
-  {
-    private readonly GardenApiContext _db;
-    public GridsController(GardenApiContext db)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class GridsController : ControllerBase
     {
-      _db = db;
-    }
-    [HttpGet]
-    public ActionResult<IEnumerable<Grid>> GetGrids() //retrieves all grid objects;
-    {
-      return _db.Grids.ToList();
-    }
+        private readonly GardenApiContext _db;
 
-    [HttpGet("{id}")]
-    public ActionResult<Grid> GetGrid(int id)
-    {
-      var grid = _db.Grids
-          .Include(g => g.GridSeeds)
-          .ThenInclude(gs => gs.Seed)
-          .FirstOrDefault(g => g.GridId == id);
-
-      if (grid == null)
-      {
-        return NotFound();
-      }
-      return grid;
-    }
-    [HttpPost]
-    public ActionResult<Grid> PostGrid(Grid grid)
-    {
-      _db.Grids.Add(grid);
-      _db.SaveChanges();
-
-      return CreatedAtAction(nameof(GetGrid), new { id = grid.GridId }, grid);
-    }
-
-    [HttpPut("{id}")] 
-    public IActionResult PutGrid(int id, Grid grid) // check id, determine result;
-    {
-      if (id != grid.GridId)
-      {
-        return BadRequest();
-      }
-
-      _db.Entry(grid).State = EntityState.Modified;
-
-      try
-      {
-        _db.SaveChanges();
-      }
-      catch (DbUpdateConcurrencyException)
-      {
-        if (!GridExists(id))
+        public GridsController(GardenApiContext db)
         {
-          return NotFound();
+            _db = db;
         }
-        else
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Grid>>> GetGrids() //return a sequence of grids
         {
-          throw;
+            return await _db.Grids.ToListAsync();
         }
-      }
 
-      return NoContent();
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Grid>> GetGrid(int id)
+        {
+            var grid = await _db.Grids
+                .Include(g => g.GridSeeds)
+                .ThenInclude(gs => gs.Seed)
+                .FirstOrDefaultAsync(g => g.GridId == id);
+
+            if (grid == null)
+            {
+                return NotFound();
+            }
+
+            return grid;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Grid>> PostGrid(Grid grid)
+        {
+            _db.Grids.Add(grid);
+            await _db.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetGrid), new { id = grid.GridId }, grid);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutGrid(int id, Grid grid) //determines result of action
+        {
+            if (id != grid.GridId)
+            {
+                return BadRequest();
+            }
+
+            _db.Entry(grid).State = EntityState.Modified;
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!GridExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Grid>> DeleteGrid(int id)
+        {
+            var grid = await _db.Grids.FindAsync(id);
+            if (grid == null)
+            {
+                return NotFound();
+            }
+
+            _db.Grids.Remove(grid);
+            await _db.SaveChangesAsync();
+
+            return grid;
+        }
+
+        private bool GridExists(int id)
+        {
+            return _db.Grids.Any(e => e.GridId == id);
+        }
     }
-
-    [HttpDelete("{id}")]
-    public ActionResult<Grid> DeleteGrid(int id)
-    {
-      var grid = _db.Grids.Find(id);
-      if(grid == null)
-      {
-        return NotFound();
-      }
-
-      _db.Grids.Remove(grid);
-      _db.SaveChanges();
-
-      return grid;
-    }
-
-    private bool GridExists(int id)
-    {
-      return _db.Grids.Any(e => e.GridId == id);
-    }
-  }
 }
