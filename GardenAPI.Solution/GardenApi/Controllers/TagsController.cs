@@ -100,5 +100,60 @@ namespace GardenApi.Controllers
             await _db.SaveChangesAsync();
             return NoContent();
         }
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> AddTags(int id, SeedDto seedDto)
+        {
+            // Check if the provided seed id exists
+            var existingSeed = await _db.Seeds.FindAsync(id);
+
+            if (existingSeed == null)
+            {
+                return NotFound(); // Seed with the given id not found
+            }
+
+            // Iterate through the list of TagIds and create SeedTag entities
+            foreach (var tagId in seedDto.TagIds)
+            {
+                // Create a new SeedTag entity and establish the relationship
+                var seedTag = new SeedTag
+                {
+                    SeedId = id,     // Use the provided seed id
+                    TagId = tagId    // Use the current tag id from the list
+                };
+
+                try
+                {
+                    _db.SeedTags.Add(seedTag);
+                }
+                catch (Exception ex)
+                {
+                    // Handle exception
+                    return StatusCode(500, $"Error adding tag to seed: {ex.Message}");
+                }
+            }
+
+            try
+            {
+                await _db.SaveChangesAsync();
+                return NoContent(); // Successfully added the tag relationships to the seed
+            }
+            catch (DbUpdateException ex)
+            {
+                // Handle exception
+                return StatusCode(500, $"Error saving changes: {ex.Message}");
+            }
+        }
+        // //PATCH api/tags/5 same as add seed to tag (would delete then just be a patch to change the seed object to and empty object?)
+        // [HttpPatch("{id}")]
+        // public async Task<IActionResult> AddSeed(int id, SeedTag seedTag)
+        // {
+        // if (id != seedTag.TagId)
+        // {
+        //     return BadRequest();
+        // }
+        // _db.SeedTags.Add(seedTag);
+        // await _db.SaveChangesAsync();
+        // return NoContent();
+        // }
     }
 }

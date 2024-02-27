@@ -19,7 +19,7 @@ public class SeedsController : ControllerBase
   public async Task<ActionResult<IEnumerable<Seed>>> Get(string type, string name, string plantingDates, string status, string results, int yield)
   {
     IQueryable<Seed> q = _db.Seeds.AsQueryable();
-    if ( type != null)
+    if (type != null)
     {
       q = q.Where(e => e.Type == type);
     }
@@ -49,7 +49,11 @@ public class SeedsController : ControllerBase
   [HttpGet("{id}")]
   public async Task<ActionResult<Seed>> GetSeed(int id)
   {
-    Seed foundSeed = await _db.Seeds.FindAsync(id);
+    Seed foundSeed = await _db.Seeds
+    // .Include(seed => seed.SeedTags)
+    // .ThenInclude(seedTag => seedTag.Tag)
+    // .FirstOrDefaultAsync(seed => seed.SeedId == id);
+    .FindAsync(id);
     if (foundSeed == null)
     {
       return NotFound();
@@ -63,6 +67,7 @@ public class SeedsController : ControllerBase
     await _db.SaveChangesAsync();
     return CreatedAtAction(nameof(GetSeed), new { id = seed.SeedId }, seed);
   }
+
   [HttpPut("{id}")]
   public async Task<IActionResult> Put(int id, Seed seed)
   {
@@ -72,7 +77,7 @@ public class SeedsController : ControllerBase
     }
     _db.Seeds.Update(seed);
 
-    try 
+    try
     {
       await _db.SaveChangesAsync();
     }
@@ -107,4 +112,40 @@ public class SeedsController : ControllerBase
     return NoContent();
   }
 
-}
+  [HttpPatch("{id}")]
+  public async Task<IActionResult> AddTags(int id, SeedDto seedDto)
+  {
+    // Check if the provided seed id exists
+    var existingSeed = await _db.Seeds.FindAsync(id);
+
+    if (existingSeed == null)
+    {
+      return NotFound(); // Seed with the given id not found
+    }
+    try
+    {
+      foreach (var tagId in seedDto.TagIds)
+      {
+        // Create a new SeedTag entity and establish the relationship
+        var seedTag = new SeedTag
+        {
+          SeedId = id,     // Use the provided seed id
+          TagId = tagId    // Use the current tag id from the list
+        };
+        _db.SeedTags.Add(seedTag);
+      }
+        await _db.SaveChangesAsync();
+        return NoContent();
+      }
+    // Iterate through the list of TagIds and create SeedTag entities
+    
+      catch (DbUpdateException ex)
+      {
+        return StatusCode(500, $"Error saving changes: {ex.Message}");
+      }
+    }
+
+    
+  }
+
+

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GardenApi.Migrations
 {
-    public partial class initial : Migration
+    public partial class AddSeedDto : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,21 +47,22 @@ namespace GardenApi.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DaysToGerminate = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DepthToSow = table.Column<int>(type: "int", nullable: false),
+                    DepthToSow = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     SeedSpacing = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     RowSpacing = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DaysToHarvest = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DaysToHarvest = table.Column<int>(type: "int", nullable: false),
                     PhotoUrl = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    DatePlanted = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Results = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Yield = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Yield = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -110,14 +111,13 @@ namespace GardenApi.Migrations
                 name: "SeedTags",
                 columns: table => new
                 {
-                    SeedTagId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     TagId = table.Column<int>(type: "int", nullable: false),
-                    SeedId = table.Column<int>(type: "int", nullable: false)
+                    SeedId = table.Column<int>(type: "int", nullable: false),
+                    SeedTagId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SeedTags", x => x.SeedTagId);
+                    table.PrimaryKey("PK_SeedTags", x => new { x.SeedId, x.TagId });
                     table.ForeignKey(
                         name: "FK_SeedTags_Seeds_SeedId",
                         column: x => x.SeedId,
@@ -160,6 +160,11 @@ namespace GardenApi.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.InsertData(
+                table: "Seeds",
+                columns: new[] { "SeedId", "DatePlanted", "DaysToGerminate", "DaysToHarvest", "DepthToSow", "Information", "Name", "PhotoUrl", "PlantingDates", "Quantity", "Results", "RowSpacing", "SeedSpacing", "Status", "Type", "Yield" },
+                values: new object[] { 1, "2-14-2024", "5-10", 45, "1/4-1/2 in", "The Hakurei Turnip (a.k.a Tokyo Turnip) variety is usually stark white and has an unmatched crispness and tender sweetness. This turnip is commonly eaten raw which has led to it being given the nickname of 'Salad Turnip'.", "Hakurei Turnip", "https://cdn.mos.cms.futurecdn.net/HMr9ceyW7Sc2kuz2S3dNF5.jpg", "spring, fall, winter", 10, "n/a", "12-24in", "2 in", "planted", "vegetable", 5 });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Grids_GardenId",
                 table: "Grids",
@@ -173,11 +178,6 @@ namespace GardenApi.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_GridSeeds_SeedId",
                 table: "GridSeeds",
-                column: "SeedId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SeedTags_SeedId",
-                table: "SeedTags",
                 column: "SeedId");
 
             migrationBuilder.CreateIndex(
