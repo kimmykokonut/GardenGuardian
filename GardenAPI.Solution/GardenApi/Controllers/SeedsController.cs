@@ -115,12 +115,12 @@ public class SeedsController : ControllerBase
   [HttpPatch("{id}")]
   public async Task<IActionResult> AddTags(int id, SeedDto seedDto)
   {
-    // Check if the provided seed id exists
+    //creates a JoinEntity but SeedID is 0 every time and not updateing the JoinEntity table ("SeedTags")
     var existingSeed = await _db.Seeds.FindAsync(id);
-
+    
     if (existingSeed == null)
     {
-      return NotFound(); // Seed with the given id not found
+      return NotFound();
     }
     try
     {
@@ -129,23 +129,21 @@ public class SeedsController : ControllerBase
         // Create a new SeedTag entity and establish the relationship
         var seedTag = new SeedTag
         {
-          SeedId = id,     // Use the provided seed id
-          TagId = tagId    // Use the current tag id from the list
+          SeedId = id,
+          TagId = tagId
         };
+        
         _db.SeedTags.Add(seedTag);
       }
+        
+      
         await _db.SaveChangesAsync();
         return NoContent();
       }
-    // Iterate through the list of TagIds and create SeedTag entities
-    
       catch (DbUpdateException ex)
       {
         return StatusCode(500, $"Error saving changes: {ex.Message}");
       }
     }
 
-    
   }
-
-
