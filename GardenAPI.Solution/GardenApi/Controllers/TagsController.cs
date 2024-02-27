@@ -7,102 +7,97 @@ namespace GardenApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TagController : ControllerBase
+    public class TagsController : ControllerBase
     {
         private readonly GardenApiContext _db;
 
-        public TagController(GardenApiContext db)
+        public TagsController(GardenApiContext db)
         {
             _db = db;
         }
 
-//seeds that have the tag
-        [HttpGet("{id}/Seeds")]
-        public ActionResult GetSeedsForTag(int id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Tag>>> Get(string nametag)
         {
-            var tag = _db.Tags
-                .Include(t => t.SeedTags)
-                .ThenInclude(st => st.Seed)
-                .FirstOrDefault(t => t.TagId == id);
+            var query = _db.Tags.AsQueryable();
 
-            if (tag == null)
+            if (nametag != null)
             {
-                return NotFound();
+                query = query.Where(entry => entry.NameTag == nametag);
+                
             }
-
-            return Ok(tag.SeedTags.Select(st => st.Seed));
+            return  await query.ToListAsync();
         }
-//attach tag to seed
-        [HttpPost("{id}/AttachSeed")]
-        public ActionResult AttachTagFromSeed(int id, int seedId)
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Tag>> GetTag(int id)
         {
-            var tag = _db.Tags.Include(t => t.SeedTags).FirstOrDefault(t => t.TagId == id);
-            var seed = _db.Seeds.Find(seedId);
-
-            if (tag == null || seed == null)
+            Tag thisTag = await _db.Tags
+            .Include(tag => tag.SeedTags)
+            .ThenInclude(join => join.Seed)
+            .FirstOrDefaultAsync(tag => tag.TagId == id);
+            if (thisTag == null)
             {
-                return NotFound();
+            return NotFound();
             }
-
-            var seedTag = new SeedTag { TagId = id, SeedId = seedId };
-            tag.SeedTags.Add(seedTag);
-            _db.SaveChanges();
-
-            return Ok();
+            return thisTag;
         }
-//detach tag to seed
-        [HttpPost("{id}/DetachSeed")]
-        public ActionResult DetachTagFromSeed(int id, int seedId)
-        {
-            var seedTag = _db.SeedTags.FirstOrDefault(st => st.TagId == id && st.SeedId == seedId);
 
-            if (seedTag == null)
-            {
-                return NotFound();
-            }
-
-            _db.SeedTags.Remove(seedTag);
-            _db.SaveChanges();
-
-            return Ok();
-        }
 //create tag
-        [HttpPost("Create")]
-        public ActionResult<Tag> CreateTag(Tag tag)
+        [HttpPost]
+        public async Task<ActionResult<Tag>> Post(Tag tag)
         {
             _db.Tags.Add(tag);
-            _db.SaveChanges();
-
-            return CreatedAtAction(nameof(GetSeedsForTag), new { id = tag.TagId }, tag);
+            await _db.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetTag), new { id = tag.TagId }, tag);
         }
+
+
 //update/edit tag
-        [HttpPut("{id}/Update")]
-        public IActionResult UpdateTag(int id, Tag tag)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, Tag tag)
         {
             if (id != tag.TagId)
             {
                 return BadRequest();
             }
+            _db.Tags.Update(tag);
+            try 
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+            if (!TagExists(id))
+            {
+                return NotFound();
+            }
+            else 
+            {
+            throw;
+            }
+                }
+    
+        return NoContent();
+    }
+    
+    private bool TagExists(int id)
+    {
+        return _db.Tags.Any(e => e.TagId == id);
+    }
 
-            _db.Entry(tag).State = EntityState.Modified;
-            _db.SaveChanges();
-
-            return NoContent();
-        }
 //delete tag
-        [HttpDelete("{id}/Delete")]
-        public IActionResult DeleteTag(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTag(int id)
         {
-            var tag = _db.Tags.Find(id);
-
-            if (tag == null)
+        Tag thisTag = await _db.Tags.FindAsync(id);
+            if (thisTag == null)
             {
                 return NotFound();
             }
 
-            _db.Tags.Remove(tag);
-            _db.SaveChanges();
-
+            _db.Tags.Remove(thisTag);
+            await _db.SaveChangesAsync();
             return NoContent();
         }
     }
