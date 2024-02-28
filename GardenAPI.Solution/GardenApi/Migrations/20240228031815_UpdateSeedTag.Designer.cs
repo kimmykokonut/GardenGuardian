@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GardenApi.Migrations
 {
     [DbContext(typeof(GardenApiContext))]
-    [Migration("20240226225919_TestDB")]
-    partial class TestDB
+    [Migration("20240228031815_UpdateSeedTag")]
+    partial class UpdateSeedTag
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -86,14 +86,17 @@ namespace GardenApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("DatePlanted")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("DaysToGerminate")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("DaysToHarvest")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("DepthToSow")
+                    b.Property<int>("DaysToHarvest")
                         .HasColumnType("int");
+
+                    b.Property<string>("DepthToSow")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Information")
                         .HasColumnType("longtext");
@@ -125,12 +128,33 @@ namespace GardenApi.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Yield")
-                        .HasColumnType("longtext");
+                    b.Property<int>("Yield")
+                        .HasColumnType("int");
 
                     b.HasKey("SeedId");
 
                     b.ToTable("Seeds");
+
+                    b.HasData(
+                        new
+                        {
+                            SeedId = 1,
+                            DatePlanted = "2-14-2024",
+                            DaysToGerminate = "5-10",
+                            DaysToHarvest = 45,
+                            DepthToSow = "1/4-1/2 in",
+                            Information = "The Hakurei Turnip (a.k.a Tokyo Turnip) variety is usually stark white and has an unmatched crispness and tender sweetness. This turnip is commonly eaten raw which has led to it being given the nickname of 'Salad Turnip'.",
+                            Name = "Hakurei Turnip",
+                            PhotoUrl = "https://cdn.mos.cms.futurecdn.net/HMr9ceyW7Sc2kuz2S3dNF5.jpg",
+                            PlantingDates = "spring, fall, winter",
+                            Quantity = 10,
+                            Results = "n/a",
+                            RowSpacing = "12-24in",
+                            SeedSpacing = "2 in",
+                            Status = "planted",
+                            Type = "vegetable",
+                            Yield = 5
+                        });
                 });
 
             modelBuilder.Entity("GardenApi.Models.SeedTag", b =>

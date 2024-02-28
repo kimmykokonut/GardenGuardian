@@ -19,7 +19,7 @@ public class SeedsController : ControllerBase
   public async Task<ActionResult<IEnumerable<Seed>>> Get(string type, string name, string plantingDates, string status, string results, int yield)
   {
     IQueryable<Seed> q = _db.Seeds.AsQueryable();
-    if ( type != null)
+    if (type != null)
     {
       q = q.Where(e => e.Type == type);
     }
@@ -49,7 +49,10 @@ public class SeedsController : ControllerBase
   [HttpGet("{id}")]
   public async Task<ActionResult<Seed>> GetSeed(int id)
   {
-    Seed foundSeed = await _db.Seeds.FindAsync(id);
+    Seed foundSeed = await _db.Seeds
+    .Include(seed => seed.SeedTags) //load JE prop of each seed (the List<SeedTag>)
+    .ThenInclude(join => join.Tag) //actual item
+    .FirstOrDefaultAsync(seed => seed.SeedId == id);
     if (foundSeed == null)
     {
       return NotFound();
@@ -57,13 +60,14 @@ public class SeedsController : ControllerBase
     return foundSeed;
   }
   [HttpPost]
-  public async Task<ActionResult<Seed>> Post(Seed seed)
+  public async Task<ActionResult<Seed>> Post(Seed seed) //CREATE
   {
     _db.Seeds.Add(seed);
     await _db.SaveChangesAsync();
     return CreatedAtAction(nameof(GetSeed), new { id = seed.SeedId }, seed);
   }
-  [HttpPut("{id}")]
+
+  [HttpPut("{id}")] //EDIT
   public async Task<IActionResult> Put(int id, Seed seed)
   {
     if (id != seed.SeedId)
@@ -72,7 +76,7 @@ public class SeedsController : ControllerBase
     }
     _db.Seeds.Update(seed);
 
-    try 
+    try
     {
       await _db.SaveChangesAsync();
     }
@@ -107,4 +111,18 @@ public class SeedsController : ControllerBase
     return NoContent();
   }
 
-}
+  [HttpPost("AddTag")] //addtag JE to seed
+  public async Task<IActionResult> AddTag(Seed seed, int tagId)
+  {
+    #nullable enable
+    SeedTag? joinEnt = await _db.SeedTags.FirstOrDefaultAsync(join => (join.TagId == tagId && join.SeedId == seed.SeedId));
+    #nullable disable
+    if (joinEnt == null && tagId != 0)
+    {
+      _db.SeedTags.Add(new SeedTag() { TagId = tagId, SeedId = seed.SeedId });
+      await _db.SaveChangesAsync();
+    }
+    return NoContent();
+  }
+
+  }

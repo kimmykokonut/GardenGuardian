@@ -16,7 +16,18 @@ namespace GardenApi.Models
     }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Seed>()
+          builder.Entity<SeedTag>()
+            .HasKey(st => new {st.SeedTagId});
+          builder.Entity<SeedTag>()
+            .HasOne(s => s.Seed)
+            .WithMany(st => st.SeedTags)
+            .HasForeignKey(s => s.SeedId);
+          builder.Entity<SeedTag>()
+            .HasOne(t => t.Tag)
+            .WithMany(st => st.SeedTags)
+            .HasForeignKey(t => t.TagId);
+
+      builder.Entity<Seed>()
             .HasData(
               new Seed { 
                 SeedId = 1,
