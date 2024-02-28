@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GardenApi.Migrations
 {
-    public partial class AddSeedDto : Migration
+    public partial class UpdateSeedTag : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -111,13 +111,14 @@ namespace GardenApi.Migrations
                 name: "SeedTags",
                 columns: table => new
                 {
-                    TagId = table.Column<int>(type: "int", nullable: false),
-                    SeedId = table.Column<int>(type: "int", nullable: false),
                     SeedTagId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    TagId = table.Column<int>(type: "int", nullable: false),
+                    SeedId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SeedTags", x => new { x.SeedId, x.TagId });
+                    table.PrimaryKey("PK_SeedTags", x => x.SeedTagId);
                     table.ForeignKey(
                         name: "FK_SeedTags_Seeds_SeedId",
                         column: x => x.SeedId,
@@ -178,6 +179,11 @@ namespace GardenApi.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_GridSeeds_SeedId",
                 table: "GridSeeds",
+                column: "SeedId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SeedTags_SeedId",
+                table: "SeedTags",
                 column: "SeedId");
 
             migrationBuilder.CreateIndex(

@@ -157,16 +157,19 @@ namespace GardenApi.Migrations
 
             modelBuilder.Entity("GardenApi.Models.SeedTag", b =>
                 {
+                    b.Property<int>("SeedTagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
                     b.Property<int>("SeedId")
                         .HasColumnType("int");
 
                     b.Property<int>("TagId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SeedTagId")
-                        .HasColumnType("int");
+                    b.HasKey("SeedTagId");
 
-                    b.HasKey("SeedId", "TagId");
+                    b.HasIndex("SeedId");
 
                     b.HasIndex("TagId");
 

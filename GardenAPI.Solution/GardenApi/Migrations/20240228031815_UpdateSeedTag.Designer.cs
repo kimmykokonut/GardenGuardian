@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GardenApi.Migrations
 {
     [DbContext(typeof(GardenApiContext))]
-    [Migration("20240227194352_AddSeedDto")]
-    partial class AddSeedDto
+    [Migration("20240228031815_UpdateSeedTag")]
+    partial class UpdateSeedTag
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -159,16 +159,19 @@ namespace GardenApi.Migrations
 
             modelBuilder.Entity("GardenApi.Models.SeedTag", b =>
                 {
+                    b.Property<int>("SeedTagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
                     b.Property<int>("SeedId")
                         .HasColumnType("int");
 
                     b.Property<int>("TagId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SeedTagId")
-                        .HasColumnType("int");
+                    b.HasKey("SeedTagId");
 
-                    b.HasKey("SeedId", "TagId");
+                    b.HasIndex("SeedId");
 
                     b.HasIndex("TagId");
 

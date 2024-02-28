@@ -50,10 +50,9 @@ public class SeedsController : ControllerBase
   public async Task<ActionResult<Seed>> GetSeed(int id)
   {
     Seed foundSeed = await _db.Seeds
-    // .Include(seed => seed.SeedTags)
-    // .ThenInclude(seedTag => seedTag.Tag)
-    // .FirstOrDefaultAsync(seed => seed.SeedId == id);
-    .FindAsync(id);
+    .Include(seed => seed.SeedTags) //load JE prop of each seed (the List<SeedTag>)
+    .ThenInclude(join => join.Tag) //actual item
+    .FirstOrDefaultAsync(seed => seed.SeedId == id);
     if (foundSeed == null)
     {
       return NotFound();
@@ -61,14 +60,14 @@ public class SeedsController : ControllerBase
     return foundSeed;
   }
   [HttpPost]
-  public async Task<ActionResult<Seed>> Post(Seed seed)
+  public async Task<ActionResult<Seed>> Post(Seed seed) //CREATE
   {
     _db.Seeds.Add(seed);
     await _db.SaveChangesAsync();
     return CreatedAtAction(nameof(GetSeed), new { id = seed.SeedId }, seed);
   }
 
-  [HttpPut("{id}")]
+  [HttpPut("{id}")] //EDIT
   public async Task<IActionResult> Put(int id, Seed seed)
   {
     if (id != seed.SeedId)
@@ -112,38 +111,19 @@ public class SeedsController : ControllerBase
     return NoContent();
   }
 
-  [HttpPatch("{id}")]
-  public async Task<IActionResult> AddTags(int id, SeedDto seedDto)
+  
+  [HttpPost("AddTag")] //addtag JE to seed
+  public async Task<IActionResult> AddTag(Seed seed, int tagId)
   {
-    //creates a JoinEntity but SeedID is 0 every time and not updateing the JoinEntity table ("SeedTags")
-    var existingSeed = await _db.Seeds.FindAsync(id);
-    
-    if (existingSeed == null)
+    #nullable enable
+    SeedTag? joinEnt = await _db.SeedTags.FirstOrDefaultAsync(join => (join.TagId == tagId && join.SeedId == seed.SeedId));
+    #nullable disable
+    if (joinEnt == null && tagId != 0)
     {
-      return NotFound();
+      _db.SeedTags.Add(new SeedTag() { TagId = tagId, SeedId = seed.SeedId });
+      await _db.SaveChangesAsync();
     }
-    try
-    {
-      foreach (var tagId in seedDto.TagIds)
-      {
-        // Create a new SeedTag entity and establish the relationship
-        var seedTag = new SeedTag
-        {
-          SeedId = id,
-          TagId = tagId
-        };
-        
-        _db.SeedTags.Add(seedTag);
-      }
-        
-      
-        await _db.SaveChangesAsync();
-        return NoContent();
-      }
-      catch (DbUpdateException ex)
-      {
-        return StatusCode(500, $"Error saving changes: {ex.Message}");
-      }
-    }
+    return NoContent();
+  }
 
   }
