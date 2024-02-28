@@ -3,6 +3,7 @@ using System;
 using GardenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GardenApi.Migrations
 {
     [DbContext(typeof(GardenApiContext))]
-    partial class GardenApiContextModelSnapshot : ModelSnapshot
+    [Migration("20240228182527_signIn")]
+    partial class signIn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
