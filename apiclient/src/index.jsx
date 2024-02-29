@@ -12,7 +12,7 @@ export function App() {
       <main>
         <Router>
           <Route path="/" component={Home} />
-          <Route path="/signin" component={SignIn} /> 
+          <Route path="/Signin" component={SignIn} /> 
           <Route default component={NotFound} />
         </Router>
       </main>

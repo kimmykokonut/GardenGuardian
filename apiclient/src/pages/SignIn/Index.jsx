@@ -1,27 +1,50 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 export const SignIn = () => {
   const [signInData, setSignInData] = useState({ email: '', password: '' });
-  const [registerData, setRegisterData] = useState({ email: '', username: '', password: '' });
   const [signInMessage, setSignInMessage] = useState('');
+  const [registerData, setRegisterData] = useState({ email: '', username: '', password: '' });
   const [registerMessage, setRegisterMessage] = useState('');
 
   const handleSignIn = async () => {
     try {
-      const response = await axios.post('/Accounts/SignIn', signInData);
-      localStorage.setItem('token', response.data.token);
-      setSignInMessage(response.data.message);
+      const response = await fetch('http://localhost:5000/Accounts/SignIn', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(signInData),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        setSignInMessage(data.message);
+      } else {
+        setSignInMessage('Unable to sign in');
+      }
     } catch (error) {
+      console.error('Error signing in:', error);
       setSignInMessage('Unable to sign in');
     }
   };
 
   const handleRegister = async () => {
     try {
-      const response = await axios.post('/Accounts/register', registerData);
-      setRegisterMessage(response.data.message);
+      const response = await fetch('http://localhost:5000/Accounts/Register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(registerData),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setRegisterMessage(data.message);
+      } else {
+        setRegisterMessage('Unable to register');
+      }
     } catch (error) {
+      console.error('Error registering:', error);
       setRegisterMessage('Unable to register');
     }
   };
