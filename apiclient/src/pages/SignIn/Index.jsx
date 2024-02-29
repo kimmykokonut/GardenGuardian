@@ -70,9 +70,9 @@ export const SignIn = () => {
         />
         <br />
         <button onClick={handleSignIn}>Sign In</button>
-        <p>{signInMessage}</p>
+        <p className={signInMessage ? 'error-message' : ''}>{signInMessage}</p>
       </div>
-<hr />
+      <hr />
       <div>
         <h2>Register</h2>
         <input
@@ -97,7 +97,7 @@ export const SignIn = () => {
         />
         <br />
         <button onClick={handleRegister}>Register</button>
-        <p>{registerMessage}</p>
+        <p className={registerMessage ? 'error-message' : ''}>{registerMessage}</p>
       </div>
     </div>
   );

@@ -45,3 +45,7 @@ button:hover {
     background: #f7f7f7;
     color: black;
 }
+
+.error-message {
+    color: red;
+  }
