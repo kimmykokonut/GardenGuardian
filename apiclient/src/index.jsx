@@ -5,7 +5,6 @@ import { SignIn } from './pages/SignIn/index.jsx';
 import { NotFound } from './pages/_404.jsx';
 import './style.css';
 import { CreateGarden } from './pages/CreateGarden/index.jsx';
-import { CreateGrid } from './pages/CreateGrid/index.jsx';
 
 export function App() {
   return (
@@ -16,7 +15,6 @@ export function App() {
           <Route path="/" component={Home} />
           <Route path="/Signin" component={SignIn} /> 
           <Route path="/create-garden" component={CreateGarden}/>
-					<Route path="/create-grid" component={CreateGrid} />
           <Route default component={NotFound} />
         </Router>
       </main>
