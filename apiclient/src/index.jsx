@@ -4,6 +4,7 @@ import { Home } from './pages/Home/index.jsx';
 import { SignIn } from './pages/SignIn/index.jsx';
 import { NotFound } from './pages/_404.jsx';
 import './style.css';
+import { CreateGarden } from './pages/CreateGarden/index.jsx';
 
 export function App() {
   return (
@@ -13,6 +14,7 @@ export function App() {
         <Router>
           <Route path="/" component={Home} />
           <Route path="/Signin" component={SignIn} /> 
+          <Route path="/create-garden" component={CreateGarden}/>
           <Route default component={NotFound} />
         </Router>
       </main>
