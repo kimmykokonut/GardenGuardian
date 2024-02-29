@@ -4,7 +4,7 @@ import { Header } from './components/Header.jsx';
 import { Home } from './pages/Home/index.jsx';
 import { NotFound } from './pages/_404.jsx';
 import './style.css';
-import { CreateGarden } from './components/CreateGardenForm.jsx';
+import { CreateGarden } from './pages/CreateGarden/index.jsx';
 
 export function App() {
 	return (

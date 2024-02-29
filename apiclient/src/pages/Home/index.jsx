@@ -2,7 +2,7 @@ import './style.css';
 
 export function Home() {
 	const handleCreateGarden = () => {
-		window.location.href = ('/url/to/create-garden');
+		window.location.href = ('/create-garden');
 	}
 
 	return (
@@ -11,9 +11,10 @@ export function Home() {
 			<h3>Get Started</h3>
 			<p>Create a garden bed, add grids, plant a seed in each grid, optional tags for seeds</p>
 
-			<section>
-				<button onClick={handleCreateGarden}>Create garden bed</button>
-			</section>
+			<button onClick={handleCreateGarden}>Create garden bed</button>
+			<hr />
+			<p>user login</p>
+			<p>user register</p>
 		</div>
 	);
 }
