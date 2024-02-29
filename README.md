@@ -39,7 +39,7 @@ Over time, we hope to implement:
 ```
 * In your terminal, navigate to the "GardenApi" directory and run `dotnet ef database update` to create a local database.
 * In GardenTracker/apiclient, enter `npm run dev` in the terminal to launch the webpage.
-* Alternatively, to view the project in a web browser, navigate to the "GardenApi" directory and run `dotnet watch run`.
+* Alternatively, to view the project's API end points in a web browser, navigate to the "GardenApi" directory and run `dotnet watch run`.
 
 ### Built With
 ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white)
@@ -248,9 +248,9 @@ Here is an example of what the request body should look like:
 
 ### Known Issues/Bugs:
 
-* Currently missing UI.
+* Currently missing UI
 
-* Functionality not fully functioning.
+* Name of garden not saving
 
 ### License
 MIT License
