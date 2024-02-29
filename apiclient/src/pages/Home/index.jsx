@@ -15,7 +15,7 @@ export function Home() {
 			<button onClick={handleCreateGarden}>Create garden bed</button>
 			<hr />
 			
-			<a href="/Signin" class="button">user login/registration</a>
+			<a href="/Signin" class="button">user login</a>
 			
 		</div>
 	);
