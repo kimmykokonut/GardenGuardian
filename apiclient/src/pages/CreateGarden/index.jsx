@@ -1,8 +1,3 @@
-//build out garden here?
-//create garden bed api call
-//add grid to garden bed id
-//add seed to grid by id
-
 //nav to seed page for details/add tags?
 //nav to garden details page with all info displayed
 import { h } from 'preact';
@@ -12,13 +7,16 @@ import { createGarden } from '../../services/api.js';
 
 export function CreateGarden() {
   const [isLoading, setIsLoading] = useState(false);
+  const [gardenData, setGardenData] = useState(null);
 
   const handleSubmitApi = async (formData) => {
     setIsLoading(true);
   
   try{
     const createdGarden = await createGarden(formData);
+    setGardenData(createdGarden);
     console.log('Garden creation success', createdGarden);
+    window.location.href = ('/create-grid');
   } catch (error) {
     console.error('fail:', error);
   }
@@ -32,13 +30,9 @@ export function CreateGarden() {
       onSubmit={handleSubmitApi} />
       {isLoading && <p>submitting...</p>}
         <hr />
-      <p>display garden info? hidden hide form once bed created</p>
-      <section>
-        <button>Add grids to this garden bed?</button>
-      </section>
-      <section>
-        <button>Add seeds to this grid?</button>
-      </section>
+      <p>Name: {gardenData.name}</p>
+      <p>Size: {gardenData.size}</p>
+      <p>Grids: {gardenData.gridQty}</p>
     </div>
   );
 }
