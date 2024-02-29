@@ -1,6 +1,7 @@
 import './style.css';
 
 export function Home() {
+	
 	const handleCreateGarden = () => {
 		window.location.href = ('/create-garden');
 	}
@@ -13,8 +14,7 @@ export function Home() {
 
 			<button onClick={handleCreateGarden}>Create garden bed</button>
 			<hr />
-			<p>user login</p>
-			<p>user register</p>
+			<p>user login/registration</p>
 		</div>
 	);
 }
