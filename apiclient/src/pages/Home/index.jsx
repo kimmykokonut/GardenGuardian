@@ -1,39 +1,19 @@
-import preactLogo from '../../assets/preact.svg';
 import './style.css';
 
 export function Home() {
+	const handleCreateGarden = () => {
+		window.location.href = ('/url/to/create-garden');
+	}
+
 	return (
 		<div class="home">
-			<a href="https://preactjs.com" target="_blank">
-				<img src={preactLogo} alt="Preact logo" height="160" width="160" />
-			</a>
-			<h1>Get Started building Vite-powered Preact Apps </h1>
+			<h1>Garden Tracker</h1>
+			<h3>Get Started</h3>
+			<p>Create a garden bed, add grids, plant a seed in each grid, optional tags for seeds</p>
+
 			<section>
-				<Resource
-					title="Learn Preact"
-					description="If you're new to Preact, try the interactive tutorial to learn important concepts"
-					href="https://preactjs.com/tutorial"
-				/>
-				<Resource
-					title="Differences to React"
-					description="If you're coming from React, you may want to check out our docs to see where Preact differs"
-					href="https://preactjs.com/guide/v10/differences-to-react"
-				/>
-				<Resource
-					title="Learn Vite"
-					description="To learn more about Vite and how you can customize it to fit your needs, take a look at their excellent documentation"
-					href="https://vitejs.dev"
-				/>
+				<button onClick={handleCreateGarden}>Create garden bed</button>
 			</section>
 		</div>
-	);
-}
-
-function Resource(props) {
-	return (
-		<a href={props.href} target="_blank" class="resource">
-			<h2>{props.title}</h2>
-			<p>{props.description}</p>
-		</a>
 	);
 }
