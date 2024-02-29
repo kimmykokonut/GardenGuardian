@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './SignIn.css';
 
 export const SignIn = () => {
   const [signInData, setSignInData] = useState({ email: '', password: '' });
@@ -19,6 +20,7 @@ export const SignIn = () => {
       if (response.ok) {
         localStorage.setItem('token', data.token);
         setSignInMessage(data.message);
+        window.location.href = '/'; 
       } else {
         setSignInMessage('Unable to sign in');
       }
@@ -59,16 +61,18 @@ export const SignIn = () => {
           value={signInData.email}
           onChange={(e) => setSignInData({ ...signInData, email: e.target.value })}
         />
+        <br />
         <input
           type="password"
           placeholder="Password"
           value={signInData.password}
           onChange={(e) => setSignInData({ ...signInData, password: e.target.value })}
         />
+        <br />
         <button onClick={handleSignIn}>Sign In</button>
-        <p>{signInMessage}</p>
+        <p className={signInMessage ? 'error-message' : ''}>{signInMessage}</p>
       </div>
-
+      <hr />
       <div>
         <h2>Register</h2>
         <input
@@ -77,20 +81,23 @@ export const SignIn = () => {
           value={registerData.email}
           onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
         />
+        <br />
         <input
           type="text"
           placeholder="Username"
           value={registerData.username}
           onChange={(e) => setRegisterData({ ...registerData, username: e.target.value })}
         />
+        <br />
         <input
           type="password"
           placeholder="Password"
           value={registerData.password}
           onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
         />
+        <br />
         <button onClick={handleRegister}>Register</button>
-        <p>{registerMessage}</p>
+        <p className={registerMessage ? 'error-message' : ''}>{registerMessage}</p>
       </div>
     </div>
   );
