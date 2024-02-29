@@ -248,9 +248,10 @@ Here is an example of what the request body should look like:
 
 ### Known Issues/Bugs:
 
-* Currently missing UI
 
-* Name of garden not saving
+* When creating garden, name and size properties are not being set, but the quantity is
+
+* UI not fully functioning
 
 ### License
 MIT License

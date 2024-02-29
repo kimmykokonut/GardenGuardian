@@ -19,3 +19,19 @@ export async function createGarden(gardenData) {
     throw error;
   }
 }
+export async function getGardenById(id) {
+  try {
+    const response = await fetch('http://localhost:5000/api/Gardens/${id}', {
+      method: 'GET'
+    });
+    if (response.ok) {
+      const responseData = await response.json();
+      return responseData;
+    } else {
+      throw new Error('Failed to get garden');
+    }
+  } catch (error) {
+    console.error('An error occurred:', error);
+    throw error;
+  }
+}

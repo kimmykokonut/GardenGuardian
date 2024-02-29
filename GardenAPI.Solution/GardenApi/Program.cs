@@ -11,7 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(opt => {
+builder.Services.AddControllers().AddJsonOptions(opt =>
+{
     opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;  //removed infinite loop that was happening with get seed by id.
 });
 
@@ -65,7 +66,11 @@ else
 }
 
 app.UseAuthorization();
-app.UseCors();
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+);
 
 app.MapControllers();
 
