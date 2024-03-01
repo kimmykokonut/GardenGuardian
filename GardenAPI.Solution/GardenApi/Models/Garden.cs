@@ -6,6 +6,6 @@ namespace GardenApi.Models
     public string Name { get; set; }
     public string Size { get; set; }
     public int GridQty { get; set; }
-    public List<Grid> Grids { get; set; } //for 1:M with grid
+    public List<Grid> Grids { get; set; } 
   }
 }

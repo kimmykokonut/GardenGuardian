@@ -1,6 +1,8 @@
 # Garden 
 by Chris Ross Davila, Gabriel Tucker<gabrieltucker260@gmail.com>, Kim Robinson<kimmykokonut@gmail.com>, Nikkita Torres<nikkitatorres@yahoo.com>
 
+![home page](./GardenAPI.Solution/GardenApi/wwwroot/img/uiHome.png)
+
 ### Description
 
 This is a project created to help users keep track of their garden. We accomplish this by allowing a to create a garden, assign grids to their garden, and keep track of which seeds are planted in which grid. A user can update the status or state a seed/plant by adding a tag to each individual seed if they wish to. On top of creating all these objects (garden, grids, seeds, tags), a user is able to fully edit and delete these at will.
@@ -61,6 +63,8 @@ Over time, we hope to implement:
 
 ### API Endpoints
 *Any mention of {id} below will be a variable that changes with relation to the user's specific object id that autoincrements and cannot be accounted for below*
+
+![swagger api](./GardenAPI.Solution/GardenApi/wwwroot/img/swagger.png)
 
 Account Registration/Login Management:
 

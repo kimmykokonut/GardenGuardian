@@ -114,9 +114,9 @@ public class SeedsController : ControllerBase
   [HttpPost("AddTag")] //addtag JE to seed
   public async Task<IActionResult> AddTag(Seed seed, int tagId)
   {
-    #nullable enable
+#nullable enable
     SeedTag? joinEnt = await _db.SeedTags.FirstOrDefaultAsync(join => (join.TagId == tagId && join.SeedId == seed.SeedId));
-    #nullable disable
+#nullable disable
     if (joinEnt == null && tagId != 0)
     {
       _db.SeedTags.Add(new SeedTag() { TagId = tagId, SeedId = seed.SeedId });
@@ -125,4 +125,4 @@ public class SeedsController : ControllerBase
     return NoContent();
   }
 
-  }
+}

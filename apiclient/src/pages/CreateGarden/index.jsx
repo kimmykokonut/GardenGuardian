@@ -1,5 +1,3 @@
-//nav to seed page for details/add tags?
-//nav to garden details page with all info displayed
 import { h } from 'preact';
 import { useState } from "preact/hooks";
 import { GardenForm } from "../../components/GardenForm";
@@ -32,7 +30,7 @@ export function CreateGarden() {
         </div>
       )}
       {isLoading && <p>submitting...</p>}
-      
+
       {gardenData != null && (
         <div>
           <p>Garden Details</p>
@@ -42,7 +40,7 @@ export function CreateGarden() {
           <br />
           <button>Add grids to garden</button>
           <br />
-          <button>Add seeds to grid</button>  
+          <button>Add seeds to grid</button>
           <br />
           <button>Add tags to seeds</button>
           <br />

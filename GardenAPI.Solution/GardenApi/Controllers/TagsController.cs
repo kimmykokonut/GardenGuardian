@@ -24,9 +24,9 @@ namespace GardenApi.Controllers
             if (nametag != null)
             {
                 query = query.Where(entry => entry.NameTag == nametag);
-                
+
             }
-            return  await query.ToListAsync();
+            return await query.ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -38,12 +38,12 @@ namespace GardenApi.Controllers
             .FirstOrDefaultAsync(tag => tag.TagId == id);
             if (thisTag == null)
             {
-            return NotFound();
+                return NotFound();
             }
             return thisTag;
         }
 
-//create tag
+        //create tag
         [HttpPost]
         public async Task<ActionResult<Tag>> Post(Tag tag)
         {
@@ -53,7 +53,7 @@ namespace GardenApi.Controllers
         }
 
 
-//update/edit tag
+        //update/edit tag
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Tag tag)
         {
@@ -62,35 +62,35 @@ namespace GardenApi.Controllers
                 return BadRequest();
             }
             _db.Tags.Update(tag);
-            try 
+            try
             {
                 await _db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-            if (!TagExists(id))
-            {
-                return NotFound();
-            }
-            else 
-            {
-            throw;
-            }
+                if (!TagExists(id))
+                {
+                    return NotFound();
                 }
-    
-        return NoContent();
-    }
-    
-    private bool TagExists(int id)
-    {
-        return _db.Tags.Any(e => e.TagId == id);
-    }
+                else
+                {
+                    throw;
+                }
+            }
 
-//delete tag
+            return NoContent();
+        }
+
+        private bool TagExists(int id)
+        {
+            return _db.Tags.Any(e => e.TagId == id);
+        }
+
+        //delete tag
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTag(int id)
         {
-        Tag thisTag = await _db.Tags.FindAsync(id);
+            Tag thisTag = await _db.Tags.FindAsync(id);
             if (thisTag == null)
             {
                 return NotFound();
