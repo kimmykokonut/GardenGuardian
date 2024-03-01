@@ -13,8 +13,8 @@ export function App() {
       <main>
         <Router>
           <Route path="/" component={Home} />
-          <Route path="/Signin" component={SignIn} /> 
-          <Route path="/create-garden" component={CreateGarden}/>
+          <Route path="/Signin" component={SignIn} />
+          <Route path="/create-garden" component={CreateGarden} />
           <Route default component={NotFound} />
         </Router>
       </main>
